@@ -1,0 +1,9 @@
+{
+  "name": "joker-poker",
+  "version": "1.0.0",
+  "description": "A fun Card game!",
+  "main": "index.js",
+  "repository": "https://github.com/Salvien-code/Joker-Poker.git",
+  "author": "Simon Samuel <salviensky@gmail.com>",
+  "license": "MIT"
+}
