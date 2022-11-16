@@ -8,4 +8,4 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "=== Deploying contract ==="
-near dev-deploy --wasmFile .target/wasm32-unknown-unknown/release/Joker-Poker
+near dev-deploy --wasmFile .target/wasm32-unknown-unknown/release/deploy

@@ -1,14 +1,21 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
+use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
+use near_sdk::near_bindgen;
+
+#[near_bindgen]
+#[derive(BorshDeserialize, BorshSerialize)]
+pub struct JokerPoker {
+    card_value: u8,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+#[near_bindgen]
+impl JokerPoker {
+    #[init]
+    pub fn init() -> Self {
+        Self { card_value: 0 }
     }
 }
+
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
+// }
