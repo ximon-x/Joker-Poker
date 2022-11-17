@@ -1,1 +1,1 @@
-export type env = "mainnet" | "testnet";
+export type Network = "mainnet" | "testnet";
