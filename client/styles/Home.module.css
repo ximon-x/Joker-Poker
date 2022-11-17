@@ -83,6 +83,7 @@
 .card {
   margin: 1rem;
   padding: 1.5rem;
+  height: 25rem;
   text-align: left;
   color: inherit;
   text-decoration: none;
@@ -113,6 +114,11 @@
 .logo {
   height: 1em;
   margin-left: 0.5rem;
+}
+
+.input {
+  margin-top: 5rem;
+  border-radius: 1rem;
 }
 
 @media (max-width: 600px) {
