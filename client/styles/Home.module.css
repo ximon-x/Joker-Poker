@@ -3,7 +3,7 @@
 }
 
 .main {
-  min-height: 100vh;
+  min-height: 70vh;
   padding: 4rem 0;
   flex: 1;
   display: flex;
@@ -12,7 +12,14 @@
   align-items: center;
 }
 
+.header {
+  min-height: 10vh;
+  display: flex;
+  padding: 2rem 0;
+}
+
 .footer {
+  min-height: 10vh;
   display: flex;
   flex: 1;
   padding: 2rem 0;
@@ -40,7 +47,7 @@
 }
 
 .title {
-  margin: 0;
+  margin: 1;
   line-height: 1.15;
   font-size: 4rem;
 }
@@ -51,7 +58,7 @@
 }
 
 .description {
-  margin: 4rem 0;
+  margin: 1rem 0;
   line-height: 1.5;
   font-size: 1.5rem;
 }
@@ -70,7 +77,7 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  max-width: 800px;
+  max-width: 70vw;
 }
 
 .card {
@@ -82,7 +89,7 @@
   border: 1px solid #eaeaea;
   border-radius: 10px;
   transition: color 0.15s ease, border-color 0.15s ease;
-  max-width: 300px;
+  max-width: 30vw;
 }
 
 .card:hover,
