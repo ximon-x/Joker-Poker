@@ -28,7 +28,10 @@ export default function Home() {
               Enter a value and then decide if the picked card will be Lower or
               Higher in value. You win 10 points if you guess correctly!
             </p>
-            <input placeholder='Enter a number'></input>
+            <input
+              className={styles.input}
+              placeholder='Enter a number'
+            ></input>
           </a>
 
           <a className={styles.card}>
