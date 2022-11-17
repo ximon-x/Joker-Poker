@@ -3,7 +3,8 @@ import { ConnectConfig } from "near-api-js";
 import { Network } from "./types";
 dotenv.config();
 
-const contractName = process.env.CONTRACT_NAME;
+const contractName =
+  process.env.CONTRACT_NAME || "mycontract.myaccount.testnet";
 
 function environment(network: Network): ConnectConfig {
   switch (network) {
