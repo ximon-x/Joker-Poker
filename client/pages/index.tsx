@@ -1,4 +1,5 @@
 import Head from "next/head";
+import ConnectWallet from "../components/ConnectButton";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
@@ -15,6 +16,7 @@ export default function Home() {
 
       <header>
         <h1 className={styles.title}>Joker Poker</h1>
+
         <p className={styles.description}>
           Guess the Card! Earn some Tokens in the process!!!
         </p>
