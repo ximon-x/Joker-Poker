@@ -1,12 +1,12 @@
 import * as dotenv from "dotenv";
 import { ConnectConfig } from "near-api-js";
-import { env } from "./types";
+import { Network } from "./types";
 dotenv.config();
 
-const CONTRACT_NAME = process.env.CONTRACT_NAME;
+const contractName = process.env.CONTRACT_NAME;
 
-function environment(env: env): ConnectConfig {
-  switch (env) {
+function environment(network: Network): ConnectConfig {
+  switch (network) {
     case "mainnet": {
       const conn: ConnectConfig = {
         networkId: "mainnet",
@@ -22,12 +22,13 @@ function environment(env: env): ConnectConfig {
       return conn;
     }
     default:
-      throw Error(`Unknown environment ${env}`);
+      throw Error(`Unknown environment ${network}`);
   }
 }
 
 const config = {
   environment,
+  contractName,
 };
 
 export default config;
