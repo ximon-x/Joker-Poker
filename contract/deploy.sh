@@ -8,4 +8,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "=== Deploying contract ==="
-near dev-deploy --wasmFile .target/wasm32-unknown-unknown/release/deploy
+
+near delete joker_poker.ximon.testnet ximon.testnet 
+near create-account joker_poker.ximon.testnet --masterAccount ximon.testnet --initialBalance 5
+near deploy --accountId=joker_poker.ximon.testnet --wasmFile=target/wasm32-unknown-unknown/release/contract
