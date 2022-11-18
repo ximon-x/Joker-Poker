@@ -1,4 +1,5 @@
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
+use near_sdk::collections::UnorderedMap;
 use near_sdk::{env, near_bindgen, AccountId, PanicOnDefault};
 
 #[derive(BorshSerialize, BorshDeserialize)]
@@ -14,7 +15,6 @@ pub enum Rank {
 pub struct Player {
     rank: Rank,
     points: u128,
-    address: AccountId,
 }
 
 #[near_bindgen]
@@ -22,7 +22,6 @@ impl Player {
     #[init]
     pub fn init() -> Self {
         Self {
-            address: (env::signer_account_id()),
             points: 0,
             rank: Rank::Noob,
         }
@@ -50,10 +49,18 @@ impl Player {
 // Card enums RANK, VALUE
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize)]
-pub struct JokerPoker {}
+pub struct JokerPoker {
+    players: UnorderedMap<AccountId, Player>,
+}
 
 #[near_bindgen]
 impl JokerPoker {
+    pub fn get_player_points(self, player_id: &AccountId) -> u128 {
+        match self.players.get(player_id) {
+            Some(player) => player.get_points(),
+            None => env::panic_str("Not a registered player"),
+        }
+    }
     // function for generating random card
 
     // higher_lower function
