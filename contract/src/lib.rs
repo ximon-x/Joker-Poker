@@ -1,22 +1,59 @@
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use near_sdk::near_bindgen;
+use near_sdk::{env, near_bindgen, AccountId, PanicOnDefault};
+
+#[derive(BorshSerialize, BorshDeserialize)]
+pub enum Rank {
+    Noob,
+    Expert,
+    Legendary,
+}
 
 // Player Mapping {address -> {rank, points}}
-// Card enums RANK, VALUE
-
 #[near_bindgen]
-#[derive(BorshDeserialize, BorshSerialize)]
-pub struct JokerPoker {
-    card_value: u8,
+#[derive(BorshSerialize, BorshDeserialize, PanicOnDefault)]
+pub struct Player {
+    rank: Rank,
+    points: u128,
+    address: AccountId,
 }
 
 #[near_bindgen]
-impl JokerPoker {
+impl Player {
     #[init]
     pub fn init() -> Self {
-        Self { card_value: 0 }
+        Self {
+            address: (env::signer_account_id()),
+            points: 0,
+            rank: Rank::Noob,
+        }
     }
 
+    #[private]
+    pub fn add_points(&mut self, points: u128) {
+        self.points = self.points + points;
+    }
+
+    pub fn get_points(self) -> u128 {
+        self.points
+    }
+
+    #[private]
+    pub fn upgrade_rank(&mut self) {
+        match self.rank {
+            Rank::Noob => self.rank = Rank::Expert,
+            Rank::Expert => self.rank = Rank::Legendary,
+            Rank::Legendary => env::panic_str("Already a Legend!"),
+        }
+    }
+}
+
+// Card enums RANK, VALUE
+#[near_bindgen]
+#[derive(BorshDeserialize, BorshSerialize)]
+pub struct JokerPoker {}
+
+#[near_bindgen]
+impl JokerPoker {
     // function for generating random card
 
     // higher_lower function
