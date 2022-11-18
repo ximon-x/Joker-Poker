@@ -1,14 +1,9 @@
-import { setupWalletSelector } from "@near-wallet-selector/core";
-import { setupMathWallet } from "@near-wallet-selector/math-wallet";
-import { setupModal } from "@near-wallet-selector/modal-ui";
-import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
-import { setupNearWallet } from "@near-wallet-selector/near-wallet";
 import { WalletConnection } from "near-api-js";
 import { Contract } from "near-api-js";
 import { connect, keyStores } from "near-api-js";
 import { formatNearAmount } from "near-api-js/lib/utils/format";
-import config from "../config";
-import { Network } from "../types";
+import config from "../../config";
+import { Network } from "../../types";
 
 const network: Network = "testnet";
 
@@ -52,14 +47,3 @@ export function logout() {
   window.walletConnection.signOut();
   window.location.reload();
 }
-
-// const selector = await setupWalletSelector({
-//   network: network,
-//   modules: [setupMathWallet(), setupNearWallet(), setupMyNearWallet()],
-// });
-
-// export const modal = setupModal(selector, {
-//   contractId: config.contractName!,
-// });
-
-// modal.show();

@@ -1,19 +1,9 @@
-import Head from "next/head";
-import ConnectWallet from "../components/ConnectButton";
+import ConnectWallet from "./ConnectButton";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Joker Poker</title>
-        <meta
-          name='description'
-          content='A splendid card game deployed on the NEAR blockchain'
-        />
-        <link rel='icon' href='/favicon.ico' />
-      </Head>
-
       <header>
         <h1 className={styles.title}>Joker Poker</h1>
 
