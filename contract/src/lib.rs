@@ -3,17 +3,16 @@ use near_sdk::collections::UnorderedMap;
 use near_sdk::{env, near_bindgen, AccountId, PanicOnDefault};
 
 #[derive(BorshSerialize, BorshDeserialize)]
-pub enum Rank {
+pub enum Status {
     Noob,
     Expert,
     Legendary,
 }
 
-// Player Mapping {address -> {rank, points}}
 #[near_bindgen]
 #[derive(BorshSerialize, BorshDeserialize, PanicOnDefault)]
 pub struct Player {
-    rank: Rank,
+    rank: Status,
     points: u128,
 }
 
@@ -23,7 +22,7 @@ impl Player {
     pub fn init() -> Self {
         Self {
             points: 0,
-            rank: Rank::Noob,
+            rank: Status::Noob,
         }
     }
 
@@ -32,21 +31,54 @@ impl Player {
         self.points = self.points + points;
     }
 
-    pub fn get_points(self) -> u128 {
-        self.points
-    }
-
     #[private]
     pub fn upgrade_rank(&mut self) {
         match self.rank {
-            Rank::Noob => self.rank = Rank::Expert,
-            Rank::Expert => self.rank = Rank::Legendary,
-            Rank::Legendary => env::panic_str("Already a Legend!"),
+            Status::Noob => self.rank = Status::Expert,
+            Status::Expert => self.rank = Status::Legendary,
+            Status::Legendary => env::panic_str("Already a Legend!"),
         }
     }
 }
 
 // Card enums RANK, VALUE
+#[derive(BorshDeserialize, BorshSerialize)]
+pub enum CardRank {
+    Ace,
+    Two,
+    Three,
+    Four,
+    Five,
+    Six,
+    Seven,
+    Eight,
+    Nine,
+    Ten,
+    Jack,
+    Queen,
+    King,
+}
+
+#[derive(BorshSerialize, BorshDeserialize)]
+pub enum CardSuit {
+    Diamond,
+    Club,
+    Heart,
+    Spade,
+}
+
+#[near_bindgen]
+#[derive(BorshDeserialize, BorshSerialize)]
+pub struct Card {
+    rank: CardRank,
+    suit: CardSuit,
+}
+
+#[near_bindgen]
+impl Card {
+    pub fn randomize(&self) -> Card {}
+}
+
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize)]
 pub struct JokerPoker {
@@ -57,7 +89,7 @@ pub struct JokerPoker {
 impl JokerPoker {
     pub fn get_player_points(self, player_id: &AccountId) -> u128 {
         match self.players.get(player_id) {
-            Some(player) => player.get_points(),
+            Some(player) => player.points,
             None => env::panic_str("Not a registered player"),
         }
     }
