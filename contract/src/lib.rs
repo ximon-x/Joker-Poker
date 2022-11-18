@@ -76,7 +76,17 @@ pub struct Card {
 
 #[near_bindgen]
 impl Card {
-    pub fn randomize(&self) -> Card {}
+    pub fn randomize(&self, index: usize, max: usize) -> u32 {
+        let seed = *env::random_seed().get(index).unwrap();
+        let rand_divider = 256 as f64 / (max + 1) as f64;
+        let result = seed as f64 / rand_divider;
+        result as u32
+    }
+
+    pub fn get_random_card(self) {
+        let random_rank = self.randomize(16, 12);
+        let random_suit = self.randomize(8, 3);
+    }
 }
 
 #[near_bindgen]
