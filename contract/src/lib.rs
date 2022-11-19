@@ -31,7 +31,7 @@ impl Player {
     }
 }
 
-#[derive(BorshDeserialize, BorshSerialize, Serialize)]
+#[derive(BorshDeserialize, BorshSerialize, Serialize, PartialEq)]
 pub enum CardRank {
     Ace,
     Two,
@@ -48,7 +48,7 @@ pub enum CardRank {
     King,
 }
 
-#[derive(BorshSerialize, BorshDeserialize, Serialize)]
+#[derive(BorshSerialize, BorshDeserialize, Serialize, PartialEq)]
 pub enum CardSuit {
     Diamond,
     Club,
@@ -56,23 +56,23 @@ pub enum CardSuit {
     Spade,
 }
 
-#[derive(BorshDeserialize, BorshSerialize, Serialize, PanicOnDefault)]
+#[derive(BorshDeserialize, BorshSerialize, Serialize, PanicOnDefault, PartialEq)]
 pub struct Card {
     rank: CardRank,
     suit: CardSuit,
 }
 
 impl Card {
-    pub fn randomize(&self, index: usize, max: usize) -> u32 {
+    pub fn randomize(index: usize, max: usize) -> u32 {
         let seed = *env::random_seed().get(index).unwrap();
         let rand_divider = 256 as f64 / (max + 1) as f64;
         let result = seed as f64 / rand_divider;
         result as u32
     }
 
-    pub fn get_random_card(self) -> Self {
-        let random_rank = self.randomize(16, 12);
-        let random_suit = self.randomize(8, 3);
+    pub fn get_random_card() -> Self {
+        let random_rank = Self::randomize(16, 12);
+        let random_suit = Self::randomize(8, 3);
 
         let random_card_rank = match random_rank {
             0 => CardRank::Ace,
@@ -121,11 +121,26 @@ impl Games {
         }
     }
 
-    pub fn joker_poker() {}
+    // Chances of winning this game is very low.
+    // You have to predict the exact card generated!
+    pub fn joker_poker(self, guessed_card: Card) {
+        let mut player = self.get_player();
+        let generated_card = Card::get_random_card();
+
+        player.add_points(1000);
+
+        if generated_card == guessed_card {
+            env::log_str("You are awesome for guessing correctly!");
+            self.reward_player(env::signer_account_id());
+        } else {
+            env::log_str("Sorry, you didn't guess correctly.");
+            self.reward_player(env::signer_account_id())
+        }
+    }
 
     pub fn higher_lower() {}
 
-    pub fn get_player(self) -> Player {
+    pub fn get_player(&self) -> Player {
         let player_id = env::signer_account_id();
         match self.players.get(&player_id) {
             Some(player) => player,
