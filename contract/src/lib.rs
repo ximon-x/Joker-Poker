@@ -1,7 +1,8 @@
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::collections::UnorderedMap;
 use near_sdk::serde::Serialize;
-use near_sdk::{env, near_bindgen, AccountId, PanicOnDefault};
+use near_sdk::{env, near_bindgen, AccountId, PanicOnDefault, Promise};
+use near_units::parse_near;
 
 #[derive(BorshSerialize, BorshDeserialize)]
 pub enum Status {
@@ -145,11 +146,36 @@ impl Games {
             ),
         };
 
-        env::log_str("You have registered successfully!");
+        env::log_str("You have registered successfully.");
     }
 
     #[private]
-    pub fn reward_player(&mut self, player_id: AccountId) {}
+    pub fn reward_player(self, player_id: AccountId) {
+        let mut player = self.get_player();
+        match player.status {
+            Status::Legendary => env::log_str("You're incredible, A Legend!"),
+            Status::Expert => match player.points {
+                100..=999 => env::log_str("Keep Racking Points!"),
+                1000..=9999 => {
+                    env::log_str("Here's your reward.");
+                    Promise::new(player_id).transfer(parse_near!("1"));
+                    player.status = Status::Legendary;
+                    env::log_str("Promoted to Legendary!");
+                }
+                _ => env::panic_str("Invalid points for an Expert."),
+            },
+            Status::Noob => match player.points {
+                0..=99 => env::log_str("Keep Racking Points!"),
+                100..=999 => {
+                    env::log_str("Here's your reward.");
+                    Promise::new(player_id).transfer(parse_near!("0.1"));
+                    player.status = Status::Expert;
+                    env::log_str("Promoted to an Expert!");
+                }
+                _ => env::panic_str("Invalid points for a Noob."),
+            },
+        };
+    }
 
     #[payable]
     pub fn deposit_rewards() {}
