@@ -189,7 +189,7 @@ impl Games {
                 1000..=9999 => {
                     env::log_str("Here's your reward.");
                     Promise::new(player_id).transfer(parse_near!("1"));
-                    player.status = Status::Legendary;
+                    player.upgrade_rank();
                     env::log_str("Promoted to Legendary!");
                 }
                 _ => env::panic_str("Invalid points for an Expert."),
@@ -199,7 +199,7 @@ impl Games {
                 100..=999 => {
                     env::log_str("Here's your reward.");
                     Promise::new(player_id).transfer(parse_near!("0.1"));
-                    player.status = Status::Expert;
+                    player.upgrade_rank();
                     env::log_str("Promoted to an Expert!");
                 }
                 _ => env::panic_str("Invalid points for a Noob."),
