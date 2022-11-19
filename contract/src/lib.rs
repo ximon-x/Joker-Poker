@@ -83,9 +83,39 @@ impl Card {
         result as u32
     }
 
-    pub fn get_random_card(self) {
+    pub fn get_random_card(self) -> Self {
         let random_rank = self.randomize(16, 12);
         let random_suit = self.randomize(8, 3);
+
+        let random_card_rank = match random_rank {
+            0 => CardRank::Ace,
+            1 => CardRank::Two,
+            2 => CardRank::Three,
+            3 => CardRank::Four,
+            4 => CardRank::Five,
+            5 => CardRank::Six,
+            6 => CardRank::Seven,
+            7 => CardRank::Eight,
+            8 => CardRank::Nine,
+            9 => CardRank::Ten,
+            10 => CardRank::Jack,
+            11 => CardRank::Queen,
+            12 => CardRank::King,
+            _ => env::panic_str("Rank was not randomized correctly!"),
+        };
+
+        let random_card_suit = match random_suit {
+            0 => CardSuit::Diamond,
+            1 => CardSuit::Club,
+            2 => CardSuit::Heart,
+            3 => CardSuit::Spade,
+            _ => env::panic_str("Suit was not randomized correctly!"),
+        };
+
+        Self {
+            rank: (random_card_rank),
+            suit: (random_card_suit),
+        }
     }
 }
 
