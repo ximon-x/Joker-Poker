@@ -1,5 +1,6 @@
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::collections::UnorderedMap;
+use near_sdk::serde::Serialize;
 use near_sdk::{env, near_bindgen, AccountId, PanicOnDefault};
 
 #[derive(BorshSerialize, BorshDeserialize)]
@@ -34,7 +35,7 @@ impl Player {
 }
 
 // Card enums RANK, VALUE
-#[derive(BorshDeserialize, BorshSerialize)]
+#[derive(BorshDeserialize, BorshSerialize, Serialize)]
 pub enum CardRank {
     Ace,
     Two,
@@ -51,7 +52,7 @@ pub enum CardRank {
     King,
 }
 
-#[derive(BorshSerialize, BorshDeserialize)]
+#[derive(BorshSerialize, BorshDeserialize, Serialize)]
 pub enum CardSuit {
     Diamond,
     Club,
@@ -60,7 +61,7 @@ pub enum CardSuit {
 }
 
 #[near_bindgen]
-#[derive(BorshDeserialize, BorshSerialize)]
+#[derive(BorshDeserialize, BorshSerialize, Serialize, PanicOnDefault)]
 pub struct Card {
     rank: CardRank,
     suit: CardSuit,
@@ -112,7 +113,7 @@ impl Card {
 }
 
 #[near_bindgen]
-#[derive(BorshDeserialize, BorshSerialize)]
+#[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
 pub struct Games {
     players: UnorderedMap<AccountId, Player>,
 }
