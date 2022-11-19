@@ -133,6 +133,10 @@ impl Games {
         }
     }
 
+    pub fn get_all_players(self) -> UnorderedMap<AccountId, Player> {
+        self.players
+    }
+
     pub fn register_player(&mut self) {
         let player_id = env::signer_account_id();
         match self.players.get(&player_id) {
