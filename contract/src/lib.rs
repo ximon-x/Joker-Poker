@@ -12,7 +12,7 @@ pub enum Status {
 
 #[derive(BorshSerialize, BorshDeserialize, PanicOnDefault)]
 pub struct Player {
-    rank: Status,
+    status: Status,
     points: u128,
 }
 
@@ -22,9 +22,9 @@ impl Player {
     }
 
     pub fn upgrade_rank(&mut self) {
-        match self.rank {
-            Status::Noob => self.rank = Status::Expert,
-            Status::Expert => self.rank = Status::Legendary,
+        match self.status {
+            Status::Noob => self.status = Status::Expert,
+            Status::Expert => self.status = Status::Legendary,
             Status::Legendary => env::panic_str("Already a Legend!"),
         }
     }
@@ -124,16 +124,29 @@ impl Games {
 
     pub fn higher_lower() {}
 
-    pub fn get_player_points(self, player_id: &AccountId) -> u128 {
-        match self.players.get(player_id) {
+    pub fn get_player_points(self) -> u128 {
+        let player_id = env::signer_account_id();
+        match self.players.get(&player_id) {
             Some(player) => player.points,
             None => env::panic_str("Not a registered player"),
         }
     }
 
-    pub fn register_player() {}
+    pub fn register_player(&mut self) {
+        let player_id = env::signer_account_id();
+        self.players.insert(
+            &player_id,
+            &Player {
+                status: Status::Noob,
+                points: 10,
+            },
+        );
+    }
 
     pub fn reward_player() {}
+
+    #[payable]
+    pub fn deposit_rewards() {}
 }
 
 // #[cfg(test)]
