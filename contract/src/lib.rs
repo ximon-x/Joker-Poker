@@ -4,14 +4,14 @@ use near_sdk::serde::Serialize;
 use near_sdk::{env, near_bindgen, AccountId, PanicOnDefault, Promise};
 use near_units::parse_near;
 
-#[derive(BorshSerialize, BorshDeserialize)]
+#[derive(BorshSerialize, BorshDeserialize, Serialize)]
 pub enum Status {
     Noob,
     Expert,
     Legendary,
 }
 
-#[derive(BorshSerialize, BorshDeserialize, PanicOnDefault)]
+#[derive(BorshSerialize, BorshDeserialize, Serialize, PanicOnDefault)]
 pub struct Player {
     status: Status,
     points: u128,
