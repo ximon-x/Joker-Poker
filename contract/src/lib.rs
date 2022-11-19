@@ -133,8 +133,8 @@ impl Games {
         }
     }
 
-    pub fn get_all_players(self) -> UnorderedMap<AccountId, Player> {
-        self.players
+    pub fn get_all_players(self) -> Vec<Player> {
+        self.players.values_as_vector().to_vec()
     }
 
     pub fn register_player(&mut self) {
