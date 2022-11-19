@@ -124,10 +124,10 @@ impl Games {
 
     pub fn higher_lower() {}
 
-    pub fn get_player_points(self) -> u128 {
+    pub fn get_player(self) -> Player {
         let player_id = env::signer_account_id();
         match self.players.get(&player_id) {
-            Some(player) => player.points,
+            Some(player) => player,
             None => env::panic_str("Not a registered player"),
         }
     }
@@ -148,7 +148,8 @@ impl Games {
         env::log_str("You have registered successfully!");
     }
 
-    pub fn reward_player() {}
+    #[private]
+    pub fn reward_player(&mut self, player_id: AccountId) {}
 
     #[payable]
     pub fn deposit_rewards() {}
