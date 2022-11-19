@@ -134,13 +134,18 @@ impl Games {
 
     pub fn register_player(&mut self) {
         let player_id = env::signer_account_id();
-        self.players.insert(
-            &player_id,
-            &Player {
-                status: Status::Noob,
-                points: 10,
-            },
-        );
+        match self.players.get(&player_id) {
+            Some(_player) => env::panic_str("Player already registered!"),
+            None => self.players.insert(
+                &player_id,
+                &Player {
+                    status: Status::Noob,
+                    points: 10,
+                },
+            ),
+        };
+
+        env::log_str("You have registered successfully!");
     }
 
     pub fn reward_player() {}
