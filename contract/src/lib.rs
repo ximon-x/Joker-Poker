@@ -10,21 +10,17 @@ pub enum Status {
     Legendary,
 }
 
-#[near_bindgen]
 #[derive(BorshSerialize, BorshDeserialize, PanicOnDefault)]
 pub struct Player {
     rank: Status,
     points: u128,
 }
 
-#[near_bindgen]
 impl Player {
-    #[private]
     pub fn add_points(&mut self, points: u128) {
         self.points = self.points + points;
     }
 
-    #[private]
     pub fn upgrade_rank(&mut self) {
         match self.rank {
             Status::Noob => self.rank = Status::Expert,
@@ -34,7 +30,6 @@ impl Player {
     }
 }
 
-// Card enums RANK, VALUE
 #[derive(BorshDeserialize, BorshSerialize, Serialize)]
 pub enum CardRank {
     Ace,
@@ -60,14 +55,12 @@ pub enum CardSuit {
     Spade,
 }
 
-#[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, Serialize, PanicOnDefault)]
 pub struct Card {
     rank: CardRank,
     suit: CardSuit,
 }
 
-#[near_bindgen]
 impl Card {
     pub fn randomize(&self, index: usize, max: usize) -> u32 {
         let seed = *env::random_seed().get(index).unwrap();
@@ -120,7 +113,7 @@ pub struct Games {
 
 #[near_bindgen]
 impl Games {
-    #[init]
+    #[init(ignore_state)]
     pub fn init() -> Self {
         Self {
             players: UnorderedMap::new(b"player".to_vec()),
