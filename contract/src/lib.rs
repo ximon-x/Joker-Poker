@@ -18,14 +18,6 @@ pub struct Player {
 
 #[near_bindgen]
 impl Player {
-    #[init]
-    pub fn init() -> Self {
-        Self {
-            points: 0,
-            rank: Status::Noob,
-        }
-    }
-
     #[private]
     pub fn add_points(&mut self, points: u128) {
         self.points = self.points + points;
@@ -121,25 +113,33 @@ impl Card {
 
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize)]
-pub struct JokerPoker {
+pub struct Games {
     players: UnorderedMap<AccountId, Player>,
 }
 
 #[near_bindgen]
-impl JokerPoker {
+impl Games {
+    #[init]
+    pub fn init() -> Self {
+        Self {
+            players: UnorderedMap::new(b"player".to_vec()),
+        }
+    }
+
+    pub fn joker_poker() {}
+
+    pub fn higher_lower() {}
+
     pub fn get_player_points(self, player_id: &AccountId) -> u128 {
         match self.players.get(player_id) {
             Some(player) => player.points,
             None => env::panic_str("Not a registered player"),
         }
     }
-    // function for generating random card
 
-    // higher_lower function
+    pub fn register_player() {}
 
-    // joker_poker function
-
-    // function for paying player
+    pub fn reward_player() {}
 }
 
 // #[cfg(test)]
