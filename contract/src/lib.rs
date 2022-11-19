@@ -1,6 +1,8 @@
+use std::fmt;
+
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::collections::UnorderedMap;
-use near_sdk::serde::Serialize;
+use near_sdk::serde::{Deserialize, Serialize};
 use near_sdk::{env, near_bindgen, AccountId, PanicOnDefault, Promise};
 use near_units::parse_near;
 
@@ -31,7 +33,7 @@ impl Player {
     }
 }
 
-#[derive(BorshDeserialize, BorshSerialize, Serialize, PartialEq)]
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, PartialEq, Debug)]
 pub enum CardRank {
     Ace,
     Two,
@@ -48,7 +50,7 @@ pub enum CardRank {
     King,
 }
 
-#[derive(BorshSerialize, BorshDeserialize, Serialize, PartialEq)]
+#[derive(BorshSerialize, BorshDeserialize, Serialize, Deserialize, PartialEq, Debug)]
 pub enum CardSuit {
     Diamond,
     Club,
@@ -56,10 +58,18 @@ pub enum CardSuit {
     Spade,
 }
 
-#[derive(BorshDeserialize, BorshSerialize, Serialize, PanicOnDefault, PartialEq)]
+#[derive(
+    BorshDeserialize, BorshSerialize, Serialize, Deserialize, PanicOnDefault, PartialEq, Debug,
+)]
 pub struct Card {
     rank: CardRank,
     suit: CardSuit,
+}
+
+impl fmt::Display for Card {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Debug::fmt(self, f)
+    }
 }
 
 impl Card {
@@ -134,7 +144,8 @@ impl Games {
             self.reward_player(env::signer_account_id());
         } else {
             env::log_str("Sorry, you didn't guess correctly.");
-            self.reward_player(env::signer_account_id())
+            env::log_str(&generated_card.to_string());
+            self.reward_player(env::signer_account_id());
         }
     }
 
