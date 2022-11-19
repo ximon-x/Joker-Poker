@@ -133,8 +133,8 @@ impl Games {
         }
     }
 
-    pub fn get_all_players(self) -> Vec<Player> {
-        self.players.values_as_vector().to_vec()
+    pub fn get_all_players(self) -> Vec<(AccountId, Player)> {
+        self.players.to_vec()
     }
 
     pub fn register_player(&mut self) {
