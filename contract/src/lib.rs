@@ -178,7 +178,9 @@ impl Games {
     }
 
     #[payable]
-    pub fn deposit_rewards() {}
+    pub fn deposit_rewards() {
+        env::log_str("Thank for contributing to this project.");
+    }
 }
 
 // #[cfg(test)]
