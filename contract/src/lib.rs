@@ -6,6 +6,7 @@ use near_sdk::serde::{Deserialize, Serialize};
 use near_sdk::{env, near_bindgen, AccountId, PanicOnDefault, Promise};
 use near_units::parse_near;
 
+#[near_bindgen]
 #[derive(BorshSerialize, BorshDeserialize, Serialize)]
 pub enum Status {
     Noob,
@@ -13,15 +14,18 @@ pub enum Status {
     Legendary,
 }
 
+#[near_bindgen]
 #[derive(BorshSerialize, BorshDeserialize, Serialize, PanicOnDefault)]
 pub struct Player {
     status: Status,
     points: u128,
 }
 
+#[near_bindgen]
 impl Player {
     pub fn add_points(&mut self, points: u128) {
         self.points = self.points + points;
+        env::log_str("{self.points has been increased!}");
     }
 
     pub fn upgrade_rank(&mut self) {
@@ -33,6 +37,7 @@ impl Player {
     }
 }
 
+#[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, PartialEq, Debug)]
 pub enum CardRank {
     Ace,
@@ -50,6 +55,7 @@ pub enum CardRank {
     King,
 }
 
+#[near_bindgen]
 #[derive(BorshSerialize, BorshDeserialize, Serialize, Deserialize, PartialEq, Debug)]
 pub enum CardSuit {
     Diamond,
@@ -58,12 +64,14 @@ pub enum CardSuit {
     Spade,
 }
 
+#[near_bindgen]
 #[derive(Serialize, Deserialize)]
 pub enum CardColor {
     Black,
     Red,
 }
 
+#[near_bindgen]
 #[derive(
     BorshDeserialize, BorshSerialize, Serialize, Deserialize, PanicOnDefault, PartialEq, Debug,
 )]
@@ -78,6 +86,7 @@ impl fmt::Display for Card {
     }
 }
 
+#[near_bindgen]
 impl Card {
     pub fn randomize(index: usize, max: usize) -> u32 {
         let seed = *env::random_seed().get(index).unwrap();
@@ -140,53 +149,63 @@ impl Games {
     // Chances of winning this game is very low.
     // You have to predict the exact card generated!
     // Winning this game gives you 1000 points.
-    pub fn joker_poker(self, guessed_card: Card) {
-        let mut player = self.get_player();
+    pub fn joker_poker(&mut self, guessed_card: Card) {
         let generated_card = Card::get_random_card();
 
-        if generated_card == guessed_card {
-            player.add_points(1000);
-            env::log_str("You are awesome for guessing correctly!");
-            self.reward_player(env::signer_account_id());
-        } else {
-            env::log_str("Sorry, you didn't guess correctly.");
-            env::log_str(&generated_card.to_string());
+        match self.players.get(&env::signer_account_id()) {
+            Some(ref mut player) => {
+                if generated_card == guessed_card {
+                    player.add_points(1000);
+                    env::log_str("You are awesome for guessing correctly!");
+                    self.reward_player(env::signer_account_id());
+                    self.players.insert(&env::signer_account_id(), &player);
+                } else {
+                    env::log_str("Sorry, you didn't guess correctly.");
+                    env::log_str(&generated_card.to_string());
+                }
+            }
+            None => env::panic_str("Player not found!"),
         }
     }
 
     pub fn higher_lower() {}
 
-    // Chances of winning this game is 50%.
-    // You simply have to guess the color of the card.
-    // Winning this game gives you 20 points.
-    pub fn black_red(self, guessed_color: CardColor) {
-        let mut player = self.get_player();
+    pub fn black_red(&mut self, guessed_color: CardColor) {
         let generated_card = Card::get_random_card();
 
-        match guessed_color {
-            CardColor::Black => {
-                if generated_card.suit == CardSuit::Club || generated_card.suit == CardSuit::Spade {
-                    player.add_points(20);
-                    env::log_str("Superb! you guessed correctly.");
-                    self.reward_player(env::signer_account_id());
-                } else {
-                    env::log_str("Sorry, you didn't guess correctly.");
-                    env::log_str(&generated_card.to_string());
+        match self.players.get(&env::signer_account_id()) {
+            Some(ref mut player) => {
+                match guessed_color {
+                    CardColor::Black => {
+                        if generated_card.suit == CardSuit::Club
+                            || generated_card.suit == CardSuit::Spade
+                        {
+                            // This does not work.
+                            player.add_points(20);
+                            env::log_str("Superb! you guessed correctly.");
+                            self.reward_player(env::signer_account_id());
+                            self.players.insert(&env::signer_account_id(), &player);
+                        } else {
+                            env::log_str("Sorry, you didn't guess correctly.");
+                            env::log_str(&generated_card.to_string());
+                        }
+                    }
+                    CardColor::Red => {
+                        if generated_card.suit == CardSuit::Diamond
+                            || generated_card.suit == CardSuit::Heart
+                        {
+                            player.add_points(20);
+                            env::log_str("Superb! you guessed correctly.");
+                            self.reward_player(env::signer_account_id());
+                        } else {
+                            env::log_str("Sorry, you didn't guess correctly.");
+                            env::log_str(&generated_card.to_string());
+                        }
+                    }
                 }
             }
-            CardColor::Red => {
-                if generated_card.suit == CardSuit::Diamond
-                    || generated_card.suit == CardSuit::Heart
-                {
-                    player.add_points(20);
-                    env::log_str("Superb! you guessed correctly.");
-                    self.reward_player(env::signer_account_id());
-                } else {
-                    env::log_str("Sorry, you didn't guess correctly.");
-                    env::log_str(&generated_card.to_string());
-                }
-            }
-        }
+            None => env::panic_str("Player not found!"),
+        };
     }
 
     pub fn get_player(&self) -> Player {
@@ -197,7 +216,7 @@ impl Games {
         }
     }
 
-    pub fn get_all_players(self) -> Vec<(AccountId, Player)> {
+    pub fn get_all_players(&self) -> Vec<(AccountId, Player)> {
         self.players.to_vec()
     }
 
@@ -218,7 +237,7 @@ impl Games {
     }
 
     #[private]
-    pub fn reward_player(self, player_id: AccountId) {
+    pub fn reward_player(&mut self, player_id: AccountId) {
         let mut player = self.get_player();
         match player.status {
             Status::Legendary => env::log_str("You're incredible, A Legend!"),
