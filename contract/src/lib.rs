@@ -58,6 +58,12 @@ pub enum CardSuit {
     Spade,
 }
 
+#[derive(Serialize, Deserialize)]
+pub enum CardColor {
+    Black,
+    Red,
+}
+
 #[derive(
     BorshDeserialize, BorshSerialize, Serialize, Deserialize, PanicOnDefault, PartialEq, Debug,
 )]
@@ -133,19 +139,18 @@ impl Games {
 
     // Chances of winning this game is very low.
     // You have to predict the exact card generated!
+    // Winning this game gives you 1000 points.
     pub fn joker_poker(self, guessed_card: Card) {
         let mut player = self.get_player();
         let generated_card = Card::get_random_card();
 
-        player.add_points(1000);
-
         if generated_card == guessed_card {
+            player.add_points(1000);
             env::log_str("You are awesome for guessing correctly!");
             self.reward_player(env::signer_account_id());
         } else {
             env::log_str("Sorry, you didn't guess correctly.");
             env::log_str(&generated_card.to_string());
-            self.reward_player(env::signer_account_id());
         }
     }
 
@@ -153,7 +158,36 @@ impl Games {
 
     // Chances of winning this game is 50%.
     // You simply have to guess the color of the card.
-    pub fn black_red() {}
+    // Winning this game gives you 20 points.
+    pub fn black_red(self, guessed_color: CardColor) {
+        let mut player = self.get_player();
+        let generated_card = Card::get_random_card();
+
+        match guessed_color {
+            CardColor::Black => {
+                if generated_card.suit == CardSuit::Club || generated_card.suit == CardSuit::Spade {
+                    player.add_points(20);
+                    env::log_str("Superb! you guessed correctly.");
+                    self.reward_player(env::signer_account_id());
+                } else {
+                    env::log_str("Sorry, you didn't guess correctly.");
+                    env::log_str(&generated_card.to_string());
+                }
+            }
+            CardColor::Red => {
+                if generated_card.suit == CardSuit::Diamond
+                    || generated_card.suit == CardSuit::Heart
+                {
+                    player.add_points(20);
+                    env::log_str("Superb! you guessed correctly.");
+                    self.reward_player(env::signer_account_id());
+                } else {
+                    env::log_str("Sorry, you didn't guess correctly.");
+                    env::log_str(&generated_card.to_string());
+                }
+            }
+        }
+    }
 
     pub fn get_player(&self) -> Player {
         let player_id = env::signer_account_id();
