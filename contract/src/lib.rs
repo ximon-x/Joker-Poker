@@ -151,6 +151,10 @@ impl Games {
 
     pub fn higher_lower() {}
 
+    // Chances of winning this game is 50%.
+    // You simply have to guess the color of the card.
+    pub fn black_red() {}
+
     pub fn get_player(&self) -> Player {
         let player_id = env::signer_account_id();
         match self.players.get(&player_id) {
