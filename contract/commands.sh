@@ -9,3 +9,6 @@ near call joker_poker.ximon.testnet joker_poker '{"guessed_card": {"rank": "Nine
 
 # Interacting with the black_red game
 near call joker_poker.ximon.testnet black_red '{"guessed_color": "Black"}' --accountId=ximon.testnet
+
+# Interacting with the higher_lower game
+near call joker_poker.ximon.testnet higher_lower '{"higher": true }' --accountId=ximon.testnet

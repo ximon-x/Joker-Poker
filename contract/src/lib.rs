@@ -34,7 +34,9 @@ impl Player {
     }
 }
 
-#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, PartialEq, Debug)]
+#[derive(
+    BorshDeserialize, BorshSerialize, Serialize, Deserialize, PartialEq, PartialOrd, Debug,
+)]
 pub enum CardRank {
     Ace,
     Two,
@@ -87,9 +89,9 @@ impl Card {
         result as u32
     }
 
-    pub fn get_random_card() -> Self {
-        let random_rank = Self::randomize(16, 12);
-        let random_suit = Self::randomize(8, 3);
+    pub fn get_random_card(index: usize) -> Self {
+        let random_rank = Self::randomize(index + 2, 12);
+        let random_suit = Self::randomize(index - 2, 3);
 
         let random_card_rank = match random_rank {
             0 => CardRank::Ace,
@@ -142,12 +144,12 @@ impl Games {
     // You have to predict the exact card generated!
     // Winning this game gives you 1000 points.
     pub fn joker_poker(&mut self, guessed_card: Card) {
-        let generated_card = Card::get_random_card();
+        let generated_card = Card::get_random_card(10);
 
         match self.players.get(&env::signer_account_id()) {
             Some(ref mut player) => {
                 if generated_card == guessed_card {
-                    player.add_points(1000);
+                    player.add_points(500);
                     env::log_str("You are awesome for guessing correctly!");
                     // the bug occurs here.
 
@@ -162,10 +164,8 @@ impl Games {
         }
     }
 
-    pub fn higher_lower() {}
-
     pub fn black_red(&mut self, guessed_color: CardColor) {
-        let generated_card = Card::get_random_card();
+        let generated_card = Card::get_random_card(8);
 
         match self.players.get(&env::signer_account_id()) {
             Some(ref mut player) => match guessed_color {
@@ -173,7 +173,7 @@ impl Games {
                     if generated_card.suit == CardSuit::Club
                         || generated_card.suit == CardSuit::Spade
                     {
-                        player.add_points(20);
+                        player.add_points(50);
                         env::log_str("Superb! you guessed correctly.");
                         self.reward_player(player);
                         self.players.insert(&env::signer_account_id(), &player);
@@ -186,7 +186,7 @@ impl Games {
                     if generated_card.suit == CardSuit::Diamond
                         || generated_card.suit == CardSuit::Heart
                     {
-                        player.add_points(20);
+                        player.add_points(50);
                         env::log_str("Superb! you guessed correctly.");
                         self.reward_player(player);
                     } else {
@@ -197,6 +197,43 @@ impl Games {
             },
             None => env::panic_str("Player not found!"),
         };
+    }
+
+    pub fn higher_lower(&mut self, higher: bool) {
+        let generated_card_1 = Card::get_random_card(15);
+        let generated_card_2 = Card::get_random_card(21);
+
+        match self.players.get(&env::signer_account_id()) {
+            Some(ref mut player) => match higher {
+                true => {
+                    if generated_card_1.rank > generated_card_2.rank {
+                        player.add_points(20);
+                        env::log_str("You were right, Card A > Card B");
+                        self.reward_player(player);
+
+                        self.players.insert(&env::signer_account_id(), &player);
+                    } else {
+                        env::log_str("Sorry, A wasn't higher than B");
+                        env::log_str(&generated_card_1.to_string());
+                        env::log_str(&generated_card_2.to_string());
+                    }
+                }
+                false => {
+                    if generated_card_1.rank < generated_card_2.rank {
+                        player.add_points(20);
+                        env::log_str("You were right, Card A < Card B");
+                        self.reward_player(player);
+
+                        self.players.insert(&env::signer_account_id(), &player);
+                    } else {
+                        env::log_str("Sorry, A wasn't lower than B");
+                        env::log_str(&generated_card_1.to_string());
+                        env::log_str(&generated_card_2.to_string());
+                    }
+                }
+            },
+            None => env::panic_str("Player not found!"),
+        }
     }
 
     pub fn get_player(&self) -> Player {
@@ -259,15 +296,3 @@ impl Games {
         env::log_str("Thank for contributing to this project.");
     }
 }
-
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
-//      test for randomness
-
-//      test for higher_lower
-
-//      test for joker_poker
-
-//      test for transfer NEAR
-// }
