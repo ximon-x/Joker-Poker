@@ -6,38 +6,34 @@ use near_sdk::serde::{Deserialize, Serialize};
 use near_sdk::{env, near_bindgen, AccountId, PanicOnDefault, Promise};
 use near_units::parse_near;
 
-#[near_bindgen]
-#[derive(BorshSerialize, BorshDeserialize, Serialize)]
+#[derive(BorshSerialize, BorshDeserialize, Serialize, Deserialize)]
 pub enum Status {
     Noob,
     Expert,
     Legendary,
 }
 
-#[near_bindgen]
-#[derive(BorshSerialize, BorshDeserialize, Serialize, PanicOnDefault)]
+#[derive(BorshSerialize, BorshDeserialize, Serialize, Deserialize, PanicOnDefault)]
 pub struct Player {
     status: Status,
     points: u128,
 }
 
-#[near_bindgen]
 impl Player {
     pub fn add_points(&mut self, points: u128) {
         self.points = self.points + points;
         env::log_str("{self.points has been increased!}");
     }
 
-    pub fn upgrade_rank(&mut self) {
+    pub fn upgrade_status(&mut self) {
         match self.status {
             Status::Noob => self.status = Status::Expert,
             Status::Expert => self.status = Status::Legendary,
             Status::Legendary => env::panic_str("Already a Legend!"),
-        }
+        };
     }
 }
 
-#[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, PartialEq, Debug)]
 pub enum CardRank {
     Ace,
@@ -55,7 +51,6 @@ pub enum CardRank {
     King,
 }
 
-#[near_bindgen]
 #[derive(BorshSerialize, BorshDeserialize, Serialize, Deserialize, PartialEq, Debug)]
 pub enum CardSuit {
     Diamond,
@@ -64,14 +59,12 @@ pub enum CardSuit {
     Spade,
 }
 
-#[near_bindgen]
 #[derive(Serialize, Deserialize)]
 pub enum CardColor {
     Black,
     Red,
 }
 
-#[near_bindgen]
 #[derive(
     BorshDeserialize, BorshSerialize, Serialize, Deserialize, PanicOnDefault, PartialEq, Debug,
 )]
@@ -86,9 +79,8 @@ impl fmt::Display for Card {
     }
 }
 
-#[near_bindgen]
 impl Card {
-    pub fn randomize(index: usize, max: usize) -> u32 {
+    fn randomize(index: usize, max: usize) -> u32 {
         let seed = *env::random_seed().get(index).unwrap();
         let rand_divider = 256 as f64 / (max + 1) as f64;
         let result = seed as f64 / rand_divider;
@@ -157,7 +149,9 @@ impl Games {
                 if generated_card == guessed_card {
                     player.add_points(1000);
                     env::log_str("You are awesome for guessing correctly!");
-                    self.reward_player(env::signer_account_id());
+                    // the bug occurs here.
+
+                    self.reward_player(player);
                     self.players.insert(&env::signer_account_id(), &player);
                 } else {
                     env::log_str("Sorry, you didn't guess correctly.");
@@ -174,36 +168,33 @@ impl Games {
         let generated_card = Card::get_random_card();
 
         match self.players.get(&env::signer_account_id()) {
-            Some(ref mut player) => {
-                match guessed_color {
-                    CardColor::Black => {
-                        if generated_card.suit == CardSuit::Club
-                            || generated_card.suit == CardSuit::Spade
-                        {
-                            // This does not work.
-                            player.add_points(20);
-                            env::log_str("Superb! you guessed correctly.");
-                            self.reward_player(env::signer_account_id());
-                            self.players.insert(&env::signer_account_id(), &player);
-                        } else {
-                            env::log_str("Sorry, you didn't guess correctly.");
-                            env::log_str(&generated_card.to_string());
-                        }
-                    }
-                    CardColor::Red => {
-                        if generated_card.suit == CardSuit::Diamond
-                            || generated_card.suit == CardSuit::Heart
-                        {
-                            player.add_points(20);
-                            env::log_str("Superb! you guessed correctly.");
-                            self.reward_player(env::signer_account_id());
-                        } else {
-                            env::log_str("Sorry, you didn't guess correctly.");
-                            env::log_str(&generated_card.to_string());
-                        }
+            Some(ref mut player) => match guessed_color {
+                CardColor::Black => {
+                    if generated_card.suit == CardSuit::Club
+                        || generated_card.suit == CardSuit::Spade
+                    {
+                        player.add_points(20);
+                        env::log_str("Superb! you guessed correctly.");
+                        self.reward_player(player);
+                        self.players.insert(&env::signer_account_id(), &player);
+                    } else {
+                        env::log_str("Sorry, you didn't guess correctly.");
+                        env::log_str(&generated_card.to_string());
                     }
                 }
-            }
+                CardColor::Red => {
+                    if generated_card.suit == CardSuit::Diamond
+                        || generated_card.suit == CardSuit::Heart
+                    {
+                        player.add_points(20);
+                        env::log_str("Superb! you guessed correctly.");
+                        self.reward_player(player);
+                    } else {
+                        env::log_str("Sorry, you didn't guess correctly.");
+                        env::log_str(&generated_card.to_string());
+                    }
+                }
+            },
             None => env::panic_str("Player not found!"),
         };
     }
@@ -237,31 +228,30 @@ impl Games {
     }
 
     #[private]
-    pub fn reward_player(&mut self, player_id: AccountId) {
-        let mut player = self.get_player();
+    pub fn reward_player(&mut self, player: &mut Player) {
         match player.status {
             Status::Legendary => env::log_str("You're incredible, A Legend!"),
             Status::Expert => match player.points {
-                100..=999 => env::log_str("Keep Racking Points!"),
+                100..=999 => env::log_str("Keep Racking Points, Expert!"),
                 1000..=9999 => {
                     env::log_str("Here's your reward.");
-                    Promise::new(player_id).transfer(parse_near!("1"));
-                    player.upgrade_rank();
+                    Promise::new(env::signer_account_id()).transfer(parse_near!("1"));
+                    player.upgrade_status();
                     env::log_str("Promoted to Legendary!");
                 }
                 _ => env::panic_str("Invalid points for an Expert."),
             },
             Status::Noob => match player.points {
-                0..=99 => env::log_str("Keep Racking Points!"),
+                0..=99 => env::log_str("Keep Racking Points!, Noob"),
                 100..=999 => {
                     env::log_str("Here's your reward.");
-                    Promise::new(player_id).transfer(parse_near!("0.1"));
-                    player.upgrade_rank();
+                    Promise::new(env::signer_account_id()).transfer(parse_near!("0.1"));
+                    player.upgrade_status();
                     env::log_str("Promoted to an Expert!");
                 }
                 _ => env::panic_str("Invalid points for a Noob."),
             },
-        };
+        }
     }
 
     #[payable]
