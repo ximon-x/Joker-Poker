@@ -1,6 +1,6 @@
 import { ENV } from "./types";
 
-const CONTRACT_NAME = process.env.CONTRACT_NAME || "joker_poker.ximon.testnet";
+const CONTRACT_NAME = process.env.CONTRACT_NAME;
 
 function environment(env: ENV) {
   switch (env) {

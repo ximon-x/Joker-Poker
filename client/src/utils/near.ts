@@ -45,7 +45,7 @@ export async function getAccountId() {
 
 export async function login() {
   return window.walletConnection.requestSignIn({
-    contractId: env.contractName,
+    contractId: process.env.CONTRACT_NAME,
   });
 }
 
