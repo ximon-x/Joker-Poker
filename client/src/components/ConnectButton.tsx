@@ -9,11 +9,11 @@ function ConnectWallet() {
   return (
     <div>
       {account.accountId ? (
-        <button className={styles.button} onClick={logout}>
+        <button className={styles.connectButton} onClick={logout}>
           Disconnect Wallet
         </button>
       ) : (
-        <button className={styles.button} onClick={login}>
+        <button className={styles.connectButton} onClick={login}>
           Connect Wallet
         </button>
       )}

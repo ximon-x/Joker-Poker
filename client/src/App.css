@@ -9,22 +9,41 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
+.App-header {
+  background-color: #edf2f4ff;
+  max-height: 20vh;
+  padding: 0.5% 5%;
+  position: relative;
 }
 
-.App-header {
-  background-color: #ffffff;
-  max-height: 20vh;
+.App-nav {
   display: flex;
-  /* flex-direction: column; */
   align-items: center;
-  justify-content: space-around;
-  /* font-size: calc(10px + 2vmin); */
+  justify-content: space-between;
+}
+
+.App-nav-logo {
+  width: 250px;
+  height: 75px;
+}
+
+.App-nav-links {
+  padding: 5px 0;
+  margin: 0;
+}
+
+.App-nav-links li {
+  display: inline-block;
+  margin: 0 20px;
+}
+
+.App-nav-links li a {
+  text-decoration: none;
+  color: red;
+  padding: 5px 0;
 }
 
 .App-Main {
-  background-color: #ffffff;
   max-height: 60vh;
   display: flex;
   flex-direction: column;
@@ -35,7 +54,6 @@
 }
 
 .App-footer {
-  background-color: #ffffff;
   max-height: 20vh;
   display: flex;
   flex-direction: column;
@@ -44,6 +62,12 @@
   font-size: calc(10px + 2vmin);
   color: red;
 }
+
 .App-link {
   color: #61dafb;
+}
+
+.App-title {
+  font-size: 4rem;
+  color: red;
 }

@@ -18,15 +18,27 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <ConnectWallet />
+        <nav className="App-nav">
+          <img src={logo} className="App-nav-logo" alt="logo" />
+          <ul className="App-nav-links">
+            <li>
+              <a href="">How To Play</a>
+            </li>
+            <li>
+              <a href="">About</a>
+            </li>
+            <li>
+              <ConnectWallet />
+            </li>
+          </ul>
+        </nav>
       </header>
       <main className="App-main">
-        <div>Select Game</div>
+        <div></div>
       </main>
-      <footer className="App-footer">
-        <h1>Made with love by Simon Samuel</h1>
-      </footer>
+      {/* <footer className="App-footer">
+        <p>Made with love by Simon Samuel</p>
+      </footer> */}
     </div>
   );
 }

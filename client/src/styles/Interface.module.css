@@ -1,3 +1,15 @@
+.connectButton {
+  background-color: white;
+  width: 200px;
+  height: 60px;
+  padding: 10px 20px;
+  text-align: center;
+  display: inline-block;
+  cursor: pointer;
+  font-weight: bolder;
+  font-size: 16px;
+}
+
 .button {
   background-color: white;
   color: #d90429ff;
@@ -7,9 +19,24 @@
   text-align: center;
   display: inline-block;
   margin: 4px 2px;
-  margin-top: 50px;
   cursor: pointer;
   border-radius: 16px;
+  font-weight: bolder;
+  font-size: 16px;
+}
+
+.button:hover {
+  background-color: red;
+  color: white;
+  width: 220px;
+  height: 70px;
+  padding: 10px 20px;
+  text-align: center;
+  display: inline-block;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 16px;
+  border-color: transparent;
   font-weight: bolder;
   font-size: 16px;
 }
