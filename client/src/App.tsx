@@ -6,15 +6,15 @@ import { getPlayer } from "./utils/games";
 
 function App() {
   const [player, setPlayer] = useState({});
-  const fetchPlayer = useCallback(async () => {
-    if (account.accountId) {
-      setPlayer(await getPlayer());
-    }
-  });
+  // const fetchPlayer = useCallback(async () => {
+  //   if (account.accountId) {
+  //     setPlayer(await getPlayer());
+  //   }
+  // });
 
-  useEffect(() => {
-    fetchPlayer();
-  }, []);
+  // useEffect(() => {
+  //   fetchPlayer();
+  // }, []);
   return (
     <div className="App">
       <header className="App-header">
