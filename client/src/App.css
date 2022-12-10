@@ -5,69 +5,67 @@
 --imperial-red: #ef233cff;
 --amaranth-red: #d90429ff; */
 
-.App {
+.app {
   text-align: center;
 }
 
-.App-header {
-  background-color: #edf2f4ff;
+.app-header {
+  background-color: #fca311;
   max-height: 20vh;
   padding: 0.5% 5%;
   position: relative;
 }
 
-.App-nav {
+.app-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.App-nav-logo {
+.app-nav-logo {
   width: 250px;
   height: 75px;
 }
 
-.App-nav-links {
+.app-nav-links {
   padding: 5px 0;
   margin: 0;
 }
 
-.App-nav-links li {
+.app-nav-links li {
   display: inline-block;
   margin: 0 20px;
 }
 
-.App-nav-links li a {
+.app-nav-links li a {
   text-decoration: none;
-  color: red;
+  color: #14213d;
+  font-size: 1rem;
+  font-weight: bold;
   padding: 5px 0;
 }
 
-.App-Main {
-  max-height: 60vh;
+.app-main {
+  min-height: 80vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: red;
+  color: #14213d;
+}
+.app-main-title {
+  font-size: 4rem;
+  color: #14213d;
 }
 
-.App-footer {
+.app-footer {
   max-height: 20vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: red;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-.App-title {
-  font-size: 4rem;
-  color: red;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #14213d;
 }

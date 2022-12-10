@@ -16,16 +16,16 @@ function App() {
   //   fetchPlayer();
   // }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <nav className="App-nav">
-          <img src={logo} className="App-nav-logo" alt="logo" />
-          <ul className="App-nav-links">
+    <div className="app">
+      <header className="app-header">
+        <nav className="app-nav">
+          <img src={logo} className="app-nav-logo" alt="logo" />
+          <ul className="app-nav-links">
             <li>
-              <a href="">How To Play</a>
+              <a href="./pages/howToPlay.tsx">How To Play</a>
             </li>
             <li>
-              <a href="">About</a>
+              <a href="./pages/about.tsx">About</a>
             </li>
             <li>
               <ConnectWallet />
@@ -33,12 +33,14 @@ function App() {
           </ul>
         </nav>
       </header>
-      <main className="App-main">
-        <div></div>
+      <main className="app-main">
+        <div>
+          <h1 className="app-title">Welcome to Joker Poker!</h1>
+        </div>
       </main>
-      {/* <footer className="App-footer">
-        <p>Made with love by Simon Samuel</p>
-      </footer> */}
+      <footer className="app-footer">
+        <p>Made with &#9829; by Simon Samuel</p>
+      </footer>
     </div>
   );
 }
