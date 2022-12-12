@@ -11,3 +11,11 @@
   font-weight: bolder;
   font-size: 16px;
 }
+
+.connect_button:hover,
+.connect_button:focus {
+  color: white;
+  background-color: #14213d;
+  border-color: transparent;
+  outline: none;
+}
