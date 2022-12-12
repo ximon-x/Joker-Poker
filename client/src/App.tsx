@@ -3,6 +3,9 @@ import logo from "./images/svg/Joker_Poker_Logo.svg";
 import "./App.css";
 import ConnectWallet from "./components/ConnectButton";
 import { getPlayer } from "./utils/games";
+import JokerPoker from "./components/JokerPoker";
+import BlackRed from "./components/BlackRed";
+import HigherLower from "./components/HigherLower";
 
 function App() {
   const [player, setPlayer] = useState({});
@@ -39,14 +42,16 @@ function App() {
           <h2>What game do you want to play?</h2>
 
           <div className="app_main_grid">
-            <div className="app_main_grid_card">
-              <button className="app_main_button">Higher Lower</button>
+            <div>
+              <BlackRed />
             </div>
-            <div className="app_main_grid_card">
-              <button className="app_main_button">Joker Poker</button>
+
+            <div>
+              <JokerPoker />
             </div>
-            <div className="app_main_grid_card">
-              <button className="app_main_button">Black Red</button>
+
+            <div>
+              <HigherLower />
             </div>
           </div>
         </div>

@@ -13,6 +13,9 @@
     "near-api-js": "^1.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-free-playing-cards": "^0.4.2",
+    "react-icons": "^4.7.1",
+    "react-modal": "^3.16.1",
     "react-scripts": "5.0.1",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0"
@@ -42,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-modal": "^3.13.1",
     "buffer": "^6.0.3"
   }
 }
