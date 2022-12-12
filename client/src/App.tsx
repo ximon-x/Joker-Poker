@@ -17,10 +17,10 @@ function App() {
   // }, []);
   return (
     <div className="app">
-      <header className="app-header">
-        <nav className="app-nav">
-          <img src={logo} className="app-nav-logo" alt="logo" />
-          <ul className="app-nav-links">
+      <header className="app_header">
+        <nav className="app_nav">
+          <img src={logo} className="app_nav_logo" alt="logo" />
+          <ul className="app_nav_links">
             <li>
               <a href="./pages/howToPlay.tsx">How To Play</a>
             </li>
@@ -33,12 +33,25 @@ function App() {
           </ul>
         </nav>
       </header>
-      <main className="app-main">
+      <main className="app_main">
         <div>
-          <h1 className="app-title">Welcome to Joker Poker!</h1>
+          <h1 className="app_main_title">Welcome to Joker Poker!</h1>
+          <h2>What game do you want to play?</h2>
+
+          <div className="app_main_grid">
+            <div className="app_main_grid_card">
+              <button className="app_main_button">Higher Lower</button>
+            </div>
+            <div className="app_main_grid_card">
+              <button className="app_main_button">Joker Poker</button>
+            </div>
+            <div className="app_main_grid_card">
+              <button className="app_main_button">Black Red</button>
+            </div>
+          </div>
         </div>
       </main>
-      <footer className="app-footer">
+      <footer className="app_footer">
         <p>Made with &#9829; by Simon Samuel</p>
       </footer>
     </div>

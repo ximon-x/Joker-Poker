@@ -1,4 +1,4 @@
-.connectButton {
+.connect_button {
   color: #14213d;
   background-color: white;
   border-color: #000000;
@@ -12,33 +12,10 @@
   font-size: 16px;
 }
 
-.button {
-  background-color: white;
-  color: #d90429ff;
-  width: 200px;
-  height: 60px;
-  padding: 10px 20px;
-  text-align: center;
-  display: inline-block;
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 16px;
-  font-weight: bolder;
-  font-size: 16px;
-}
-
-.button:hover {
-  background-color: red;
+.connect_button:hover,
+.connect_button:focus {
   color: white;
-  width: 220px;
-  height: 70px;
-  padding: 10px 20px;
-  text-align: center;
-  display: inline-block;
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 16px;
+  background-color: #14213d;
   border-color: transparent;
-  font-weight: bolder;
-  font-size: 16px;
+  outline: none;
 }
