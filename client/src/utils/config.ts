@@ -1,5 +1,16 @@
 import { ENV } from "./types";
 
+export const modalStyles = {
+  content: {
+    top: "15%",
+    left: "5%",
+    right: "5%",
+    bottom: "20%",
+    background: "#e5e5e5",
+    color: "#14213d",
+  },
+};
+
 const CONTRACT_NAME = process.env.CONTRACT_NAME;
 
 function environment(env: ENV) {
