@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styles from "../styles/Interface.module.css";
 import Modal from "react-modal";
 import { modalStyles } from "../utils/config";
-import { registerPlayer } from "../utils/games";
+import { blackRed, registerPlayer } from "../utils/games";
+import { CardColor } from "../utils/types";
 
 function BlackRed() {
   const [modalStatus, setModalStatus] = useState(false);
+  const [guessedColor, setGuessedColor] = useState<CardColor | null>(null);
 
   const toggleModal = () => {
     setModalStatus(!modalStatus);
@@ -29,6 +31,22 @@ function BlackRed() {
         </header>
 
         <main>
+          <form>
+            <fieldset>
+              <legend>
+                <h2>Select your Color!</h2>
+              </legend>
+              <select>
+                <option>Black</option>
+                <option>Red</option>
+              </select>
+              <input type="submit"></input>
+            </fieldset>
+          </form>
+
+          {/* <legend>
+            <h2>Black Red</h2>
+          </legend>
           <div>
             <p className={styles.game_description}>
               Guess the Color of the Random Card that will be generated on the
@@ -42,7 +60,7 @@ function BlackRed() {
             <p>Make your selection!</p>
             <button>Red</button>
             <button>Black</button>
-          </div>
+          </div> */}
         </main>
 
         <footer>
