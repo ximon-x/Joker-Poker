@@ -11,7 +11,7 @@ export const modalStyles = {
   },
 };
 
-const CONTRACT_NAME = process.env.CONTRACT_NAME;
+const CONTRACT_NAME = import.meta.env.CONTRACT_NAME;
 
 function environment(env: ENV) {
   switch (env) {
