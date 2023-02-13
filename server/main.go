@@ -1,19 +1,27 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"net/http"
+	"server/user"
+
+	"github.com/gin-gonic/gin"
 )
 
-func main() {
-	handler := http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		resp := []byte(`{"status": "ok"}`)
-		rw.Header().Set("Content-Type", "application/json")
-		rw.Header().Set("Content-Length", fmt.Sprintf("%d", len(resp)))
-		rw.Write(resp)
+func home(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"message": "hello",
 	})
+}
 
-	log.Println("Listening on http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", handler))
+func main() {
+	router := gin.Default()
+	router.SetTrustedProxies([]string{"192.168.1.2"})
+
+	// Route Handlers / Endpoints
+	router.GET("/", home)
+	router.GET("user/", user.GetUsers)
+	router.GET("user/:accountId", user.GetUserbyId)
+	router.POST("user/", user.PostUser)
+
+	router.Run(":8080")
 }
