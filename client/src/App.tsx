@@ -19,8 +19,8 @@ function App() {
   //   fetchPlayer();
   // }, []);
   return (
-    <div className="app">
-      <header className="app_header">
+    <div className="text-center">
+      <header className="bg-amber-500 max-h-25 px-0.5 py-2.5 relative">
         <nav className="app_nav">
           <img src={logo} className="app_nav_logo" alt="logo" />
           <ul className="app_nav_links">
