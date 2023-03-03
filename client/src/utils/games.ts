@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { CardColor, CardRank, CardSuit } from "./types";
 
-const GAS = 100000000000000;
+export const GAS = 100000000000000;
 
 export function getPlayer() {
   return window.contract.get_player();

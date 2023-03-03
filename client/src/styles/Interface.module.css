@@ -19,3 +19,43 @@
   border-color: transparent;
   outline: none;
 }
+
+.game_button {
+  color: #14213d;
+  background-color: white;
+  border-color: #000000;
+  width: 200px;
+  height: 60px;
+  padding: 10px 20px;
+  text-align: center;
+  display: inline-block;
+  cursor: pointer;
+  font-weight: bolder;
+  font-size: 16px;
+  margin-top: 50px;
+}
+
+.game_button:hover {
+  background-color: #fca311;
+  border-color: transparent;
+}
+
+.game_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.game_title {
+  font-size: 4rem;
+  color: #fca311;
+  margin: 5px 0;
+  text-align: center;
+}
+
+.game_description {
+  font-size: 2rem;
+  color: #14213d;
+  margin: 5px 0;
+  text-align: center;
+}
