@@ -2,7 +2,7 @@ package main
 
 import (
 	"net/http"
-	"server/user"
+	"server/pkg/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,9 +19,9 @@ func main() {
 
 	// Route Handlers / Endpoints
 	router.GET("/", home)
-	router.GET("user/", user.GetUsers)
-	router.GET("user/:accountId", user.GetUserbyId)
-	router.POST("user/", user.PostUser)
+	router.GET("user/", models.GetUsers)
+	router.GET("user/:accountId", models.GetUserbyId)
+	router.POST("user/", models.PostUser)
 
 	router.Run(":8080")
 }
