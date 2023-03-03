@@ -1,7 +1,7 @@
 import React from "react";
 import { login, logout } from "../utils/near";
 
-function ConnectWallet() {
+function ConnectButton() {
   // @ts-ignore
   const account = window.walletConnection.account();
 
@@ -15,9 +15,8 @@ function ConnectWallet() {
           Disconnect Wallet
         </button>
       ) : (
-        // <button className={styles.connect_button} onClick={login}>
         <button
-          className="text-oxford-blue bg-white w-48 h-16 px-2.5 py-5 text-center font-bold inline-block cursor-pointer"
+          className="text-oxford-blue bg-white border-black border-2 w-48 h-16 px-2.5 py-0 mx-4 text-center font-bold inline-block cursor-pointer"
           onClick={login}
         >
           Connect Wallet
@@ -27,4 +26,4 @@ function ConnectWallet() {
   );
 }
 
-export default ConnectWallet;
+export default ConnectButton;
