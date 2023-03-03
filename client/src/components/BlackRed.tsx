@@ -1,16 +1,25 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import styles from "../styles/Interface.module.css";
 import Modal from "react-modal";
 import { modalStyles } from "../utils/config";
-import { blackRed, registerPlayer } from "../utils/games";
 import { CardColor } from "../utils/types";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { registerPlayer } from "../utils/games";
+
+interface IFormInput {
+  color: CardColor;
+}
 
 function BlackRed() {
   const [modalStatus, setModalStatus] = useState(false);
-  const [guessedColor, setGuessedColor] = useState<CardColor | null>(null);
+  const { register, handleSubmit } = useForm<IFormInput>();
 
   const toggleModal = () => {
     setModalStatus(!modalStatus);
+  };
+
+  const onSubmit: SubmitHandler<IFormInput> = (data) => {
+    data.color === CardColor.Black ? console.log("black") : console.log("red");
   };
 
   return (
@@ -25,47 +34,34 @@ function BlackRed() {
         style={modalStyles}
         ariaHideApp={false}
       >
-        <header className={styles.game_header}>
-          <h1 className={styles.game_title}>Black Red</h1>
-          <button onClick={toggleModal}>X</button>
+        <header className="flex items-center justify-between">
+          <h1 className="text-center text-orange-web mx-1 text-6xl">
+            Black Red
+          </h1>
+          <button
+            className="bg-white text-oxford-blue w-48 h-16 px-2 py-5"
+            onClick={registerPlayer}
+          >
+            Register Here!
+          </button>
         </header>
 
-        <main>
-          <form>
+        <main className="block">
+          <form onSubmit={handleSubmit(onSubmit)}>
             <fieldset>
-              <legend>
-                <h2>Select your Color!</h2>
-              </legend>
-              <select>
-                <option>Black</option>
-                <option>Red</option>
+              <h2 className="text-2xl text-oxford-blue mx-1 px-10 text-center">
+                Select your Color!
+              </h2>
+              <select {...register("color")}>
+                <option value="black">Black</option>
+                <option value="red">Red</option>
               </select>
-              <input type="submit"></input>
+              <input type="submit" />
             </fieldset>
           </form>
-
-          {/* <legend>
-            <h2>Black Red</h2>
-          </legend>
-          <div>
-            <p className={styles.game_description}>
-              Guess the Color of the Random Card that will be generated on the
-              Blockchain.
-            </p>
-            <p>Register here if you haven't: </p>
-            <button onClick={registerPlayer}>Register Player</button>
-          </div>
-
-          <div>
-            <p>Make your selection!</p>
-            <button>Red</button>
-            <button>Black</button>
-          </div> */}
         </main>
 
-        <footer>
-          <p>Player Status</p>
-        </footer>
+        <footer></footer>
       </Modal>
     </div>
   );
